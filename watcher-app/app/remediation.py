@@ -9,12 +9,22 @@ _k8s_client = None
 
 
 def _get_k8s_client():
-    """Lazily initializes the Kubernetes client, only when actually needed."""
+    """
+    Lazily initializes the Kubernetes client, only when actually needed.
+
+    Tries in-cluster config first (works when this app runs as a pod inside
+    the cluster, using its ServiceAccount token). Falls back to a local
+    kubeconfig file (~/.kube/config) for local development/testing.
+    """
     global _k8s_client
     if _k8s_client is None:
         from kubernetes import client, config
 
-        config.load_kube_config()  # reads from ~/.kube/config
+        try:
+            config.load_incluster_config()
+        except config.ConfigException:
+            config.load_kube_config()
+
         _k8s_client = client.CoreV1Api()
     return _k8s_client
 

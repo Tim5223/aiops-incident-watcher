@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  # No "type" specified -> defaults to ClusterIP, meaning only reachable
+  # from inside the cluster (the watcher app), not from the internet.

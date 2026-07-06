@@ -1,0 +1,21 @@
+# Routes all traffic on port 80 to the watcher-app service.
+# No "host" specified -- this matches ANY hostname, so it'll work
+# whether you hit it via the raw IP or a domain name later.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: watcher-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: watcher-app
+                port:
+                  number: 8000

@@ -1,0 +1,12 @@
+# k3s ships with a built-in "local-path" StorageClass by default,
+# so this PVC will be automatically fulfilled without any extra setup.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

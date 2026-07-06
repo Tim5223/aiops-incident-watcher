@@ -25,7 +25,7 @@ variable "public_subnet_cidr" {
 variable "instance_type" {
   description = "EC2 instance type (keep free-tier eligible)"
   type        = string
-  default     = "t3.micro"
+  default     = "m7i-flex.large"
 }
 
 variable "my_ip" {

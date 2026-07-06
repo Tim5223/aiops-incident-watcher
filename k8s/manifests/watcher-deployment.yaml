@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: watcher-app
+  labels:
+    app: watcher-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: watcher-app
+  template:
+    metadata:
+      labels:
+        app: watcher-app
+    spec:
+      serviceAccountName: watcher-service-account
+      containers:
+        - name: watcher-app
+          image: tim5223/aiops-watcher:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: watcher-secret
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5

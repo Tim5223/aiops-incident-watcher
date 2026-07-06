@@ -27,14 +27,6 @@ resource "aws_security_group" "vm" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "Watcher app NodePort (temporary, until Ingress is set up)"
-    from_port   = 30080
-    to_port     = 30080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     description = "Allow all outbound"
     from_port   = 0

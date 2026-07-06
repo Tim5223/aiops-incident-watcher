@@ -1,0 +1,14 @@
+# Switched from NodePort to ClusterIP now that Ingress handles external
+# access. ClusterIP means this is only reachable from inside the cluster
+# (i.e. from the ingress-nginx controller), not directly from the internet.
+apiVersion: v1
+kind: Service
+metadata:
+  name: watcher-app
+spec:
+  type: ClusterIP
+  selector:
+    app: watcher-app
+  ports:
+    - port: 8000
+      targetPort: 8000
