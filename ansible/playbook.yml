@@ -1,0 +1,8 @@
+---
+- name: Bootstrap AIOps Watcher VM
+  hosts: watcher
+  become: no
+
+  roles:
+    - docker
+    - k3s
