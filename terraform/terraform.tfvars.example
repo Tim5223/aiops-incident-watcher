@@ -1,0 +1,7 @@
+# Copy this file to terraform.tfvars and fill in your own values.
+# terraform.tfvars should NOT be committed to git.
+
+aws_region    = "ap-southeast-1"
+project_name  = "aiops-watcher"
+my_ip         = "YOUR_PUBLIC_IP/32"   # find via `curl ifconfig.me`
+key_pair_name = "your-existing-ec2-key-pair-name"
