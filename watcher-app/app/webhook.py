@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.llm_client import get_diagnosis
+from app.remediation import decide_and_act
 
 
 def process_alertmanager_payload(payload: dict, db: Session) -> list[models.Incident]:
@@ -34,13 +35,14 @@ def process_alertmanager_payload(payload: dict, db: Session) -> list[models.Inci
         details = json.dumps({"labels": labels, "annotations": annotations})
 
         diagnosis = get_diagnosis(alert_name, details)
+        action_taken, outcome = decide_and_act(alert_name, labels)
 
         incident = models.Incident(
             alert_name=alert_name,
             raw_payload=details,
             diagnosis=diagnosis,
-            action_taken="alerted_only",  # for now; remediation logic comes later
-            outcome=None,
+            action_taken=action_taken,
+            outcome=outcome,
         )
         db.add(incident)
         created_incidents.append(incident)
