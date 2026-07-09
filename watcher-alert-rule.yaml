@@ -1,0 +1,24 @@
+# Fires when any pod restarts more than 3 times within a 10-minute window.
+# The alertname "PodCrashLooping" is intentional -- it matches exactly what
+# app/remediation.py already checks for in SAFE_TO_AUTO_REMEDIATE, so no
+# app code changes are needed to handle this real alert.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: watcher-custom-rules
+  namespace: monitoring
+  labels:
+    release: monitoring  # must match the kube-prometheus-stack release label
+spec:
+  groups:
+    - name: watcher.rules
+      rules:
+        - alert: PodCrashLooping
+          expr: |
+            increase(kube_pod_container_status_restarts_total[10m]) > 3
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod {{ $labels.pod }} is crash looping"
+            description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted more than 3 times in the last 10 minutes."

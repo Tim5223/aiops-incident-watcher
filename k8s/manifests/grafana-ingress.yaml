@@ -1,0 +1,20 @@
+# Grafana is configured with serve_from_sub_path=true, which means Grafana
+# itself expects to see the full "/grafana" prefix in incoming requests --
+# so nginx must NOT strip/rewrite the path here (no rewrite-target).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /grafana
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-grafana
+                port:
+                  number: 80
