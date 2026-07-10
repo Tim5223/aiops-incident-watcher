@@ -35,6 +35,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Deploy latest image
+        env:
+          KUBECONFIG: /home/ubuntu/.kube/config
         run: |
           kubectl rollout restart deployment/watcher-app
           kubectl rollout status deployment/watcher-app --timeout=120s
